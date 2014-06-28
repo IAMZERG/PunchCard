@@ -1,0 +1,14 @@
+Punched in at Mon Jun  9 20:57:31 2014  Description:  this is what i am doing now
+Punched out at Mon Jun  9 20:57:48 2014  Description:  finished what i was doing. moving on to x
+Punched out at Mon Jun  9 20:58:07 2014  Description:  end of day.  Time go play video games.  Yay!
+Punched out at Mon Jun  9 20:59:47 2014  Description:  Start of a new day.  Trying to get everything working
+Punched out at Mon Jun  9 21:01:37 2014  Description:  another punch out
+Punched out at Mon Jun  9 21:03:32 2014  Description:  oops. somethin not working now
+Punched out at Mon Jun  9 21:03:50 2014  Description:  ruh roh
+Punched in at Mon Jun  9 21:06:19 2014  Description:  this is another test
+Punched out at Mon Jun  9 21:06:29 2014  Description:  this is another test
+Punched in at Mon Jun  9 21:06:37 2014  Description:  this is another test
+Punched out at Mon Jun  9 21:06:43 2014  Description:  yay.
+Punched in at Mon Jun  9 22:28:21 2014  Description:  works. im a happy man.
+Punched out at Fri Jun 27 19:27:44 2014  Description:  This is a random punch.
+	Total time:  430.35701623333824 hours.

@@ -1,0 +1,3 @@
+Punched in at Thu Jun 26 01:02:20 2014  Description:  first punch
+Punched out at Thu Jun 26 01:02:20 2014  Description:  yet another successful punch out
+	Total time:  0.0 hours.
