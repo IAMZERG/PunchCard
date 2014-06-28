@@ -18,10 +18,16 @@ import os
 
 class PunchInOut(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
-        with open(os.path.dirname(os.path.realpath(__file__))+"/current_timesheet.txt", mode="rb") as current_timesheet:
+        #current_timesheet.txt holds a pickle of the file created using the --new option
+        with open(os.path.dirname(os.path.realpath(__file__))+"\current_timesheet.txt", mode="rb") as current_timesheet:
+            #print(str(current_timesheet))
             sheet_name=pickle.load(current_timesheet)
-            with open(os.path.dirname(os.path.realpath(__file__))+"/pickle_"+sheet_name, mode="rb") as picklefile:
-                print(os.path.dirname(os.path.realpath(__file__))+"/pickle_"+sheet_name)
+            if not (os.path.exists(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name)):
+                f=open(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name, "wb")
+                f.close()
+            with open(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name, mode="rb") as picklefile:
+                #print(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name)
+                #print("This is just above the try statement")
                 try:
                     timedict = pickle.load(picklefile)
                     timedict["punch_times"].append(time.time())
@@ -38,8 +44,9 @@ class PunchInOut(argparse.Action):
                         desc = input("Description:  ")
                         timedict["desc"].append(desc)
                         timedict["punched_in"].append(True)
-                except EOFError:
+                except EOFError as err:
                     timedict = {"punched_in": [True], "desc": ["first punch"],"punch_times":[time.time()]}
+                    #print("This is inside the except statement. ", "Error: ", err)
 
             with open(os.path.dirname(os.path.realpath(__file__))+"/pickle_"+sheet_name, mode="wb") as picklefile:
                     pickle.dump(timedict, picklefile)
@@ -78,7 +85,7 @@ class TimesheetPrint(argparse.Action):
 class NewTimesheet(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         filename=input("Enter a file name for the new timesheet.  Include a file extension (preferably .txt)?\n")
-        with open(os.path.dirname(os.path.realpath(__file__))+"/current_timesheet.txt", mode="wb+") as current_timesheet:
+        with open(os.path.dirname(os.path.realpath(__file__))+"/current_timesheet.txt", mode="wb") as current_timesheet:
             pickle.dump(filename, current_timesheet)
             
                 
@@ -136,10 +143,10 @@ class NewTimesheet(argparse.Action):
           #OPTION HANDLING
 ###############################################
 
-
+print("Note: if program keeps throwing an error, try creating a new timesheet first")
 parser = argparse.ArgumentParser()
 parser.add_argument('--in', '--out', '-i', '-o', nargs=0, action=PunchInOut, help='Creating a punch in entry.  Prompts for a description')
 parser.add_argument('--timesheet', '-t', nargs=0, action=TimesheetPrint, help='Creating a timesheet from the punches in the punch list.')
-parser.add_argument('--new', '-n', nargs=0, action=NewTimesheet, help='Making new timesheet, punching into it.')
+parser.add_argument('--new', '-n', nargs=0, action=NewTimesheet, help='Making new timesheet.  Does not punch into it.')
 # parser.add_argument('--change', '-c', action=Change, help='Change to a different timesheet, punch into it.')
 parser.parse_args()
