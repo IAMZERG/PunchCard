@@ -27,7 +27,6 @@ class PunchInOut(argparse.Action):
                 f.close()
             with open(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name, mode="rb") as picklefile:
                 #print(os.path.dirname(os.path.realpath(__file__))+"\pickle_"+sheet_name)
-                #print("This is just above the try statement")
                 try:
                     timedict = pickle.load(picklefile)
                     timedict["punch_times"].append(time.time())
@@ -45,7 +44,8 @@ class PunchInOut(argparse.Action):
                         timedict["desc"].append(desc)
                         timedict["punched_in"].append(True)
                 except EOFError as err:
-                    timedict = {"punched_in": [True], "desc": ["first punch"],"punch_times":[time.time()]}
+                    print("Successfully punched in at approx. ", time.ctime())
+                    timedict = {"punched_in": [True], "desc": [input("\nDescription:  ")],"punch_times":[time.time()]}
                     #print("This is inside the except statement. ", "Error: ", err)
 
             with open(os.path.dirname(os.path.realpath(__file__))+"/pickle_"+sheet_name, mode="wb") as picklefile:
@@ -64,21 +64,23 @@ class TimesheetPrint(argparse.Action):
                             print("There was an error in loading timestamps")
                             pass
                 my_dict = zip(timedict["punch_times"], timedict["desc"], timedict["punched_in"])
+                ins=[]
+                outs=[]
                 for (punch, desc, punched_in) in my_dict:
                         if (punched_in):
                                 status="in"
+                                ins.append(punch)
                         if (not punched_in):
                                 status="out"
+                                outs.append(punch)
                         timecard.write("Punched " + status + " at " + time.ctime(punch) + "  Description:  " + desc + "\n")
-                #calculating the total time:
-                if (timedict["punched_in"][-1]):
-                        total_time=0
-                        for index, punch in enumerate(timedict["punch_times"][:-1:2]):  #using the [start:stop:step] notation to my advantage
-                                total_time = punch - timedict["punch_times"][index+1]
-                else:
-                        for index, punch in enumerate(timedict["punch_times"][::2]):
-                                total_time = punch - timedict["punch_times"][index+1]
-                timecard.write("\tTotal time:  " + str(total_time/60/60) + " hours.")
+                total_time=0.0
+                print(str(ins), str(outs))
+
+                for (i,o) in zip(ins, outs):
+                        total_time=total_time+(o-i)
+                        print(str(o-i))
+                timecard.write("Total time: "+str(total_time/60/60))
                 print("Timesheet created successfully.  Filename: ", "timesheet_"+sheet_name)
 
 #current_timesheet will be the current active timesheet.
