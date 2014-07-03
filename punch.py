@@ -44,7 +44,7 @@ class PunchInOut(argparse.Action):
                         timedict["desc"].append(desc)
                         timedict["punched_in"].append(True)
                 except EOFError as err:
-                    print("Successfully punched in at approx. ", time.ctime())
+                    print("Successfully punched into" + sheet_name + " at approx. " + time.ctime())
                     timedict = {"punched_in": [True], "desc": [input("\nDescription:  ")],"punch_times":[time.time()]}
                     #print("This is inside the except statement. ", "Error: ", err)
 
